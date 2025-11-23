@@ -19,6 +19,7 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 - **Vite** - Next generation frontend tooling for lightning-fast builds
 - **TypeScript** - Type-safe JavaScript
 - **React 18** - Modern React with hooks and concurrent features
+- **Inertia.js** - Build SPAs without building an API
 - **Tailwind CSS v3** - Utility-first CSS framework
 - **Shadcn UI** - Beautiful, accessible component library
 - **Dark Mode** - Built-in theme switching
@@ -36,6 +37,7 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 ✅ **File Uploads** - ActiveStorage configured
 ✅ **Testing** - RSpec, Capybara, FactoryBot ready
 ✅ **Modern Frontend** - React + TypeScript + Vite
+✅ **Inertia.js** - SPA experience without building an API
 ✅ **UI Components** - Shadcn UI + Tailwind CSS
 
 ## Prerequisites
@@ -212,6 +214,231 @@ export default function Dashboard() {
   )
 }
 ```
+
+## Working with Inertia.js
+
+Inertia.js lets you build modern single-page applications using classic server-side routing and controllers. No need to build a separate API!
+
+### Creating an Inertia Page
+
+1. **Create a React page component:**
+
+```tsx
+// app/frontend/pages/Dashboard.tsx
+import React from 'react'
+import { Head, Link } from '@inertiajs/react'
+import { Button } from '@/components/ui/button'
+
+interface DashboardProps {
+  user: {
+    name: string
+    email: string
+  }
+  stats: {
+    views: number
+    posts: number
+  }
+}
+
+export default function Dashboard({ user, stats }: DashboardProps) {
+  return (
+    <>
+      <Head title="Dashboard" />
+
+      <div className="p-8">
+        <h1 className="text-4xl font-bold mb-4">
+          Welcome, {user.name}!
+        </h1>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-card p-6 rounded-lg border">
+            <h3 className="text-lg font-semibold">Views</h3>
+            <p className="text-3xl">{stats.views}</p>
+          </div>
+          <div className="bg-card p-6 rounded-lg border">
+            <h3 className="text-lg font-semibold">Posts</h3>
+            <p className="text-3xl">{stats.posts}</p>
+          </div>
+        </div>
+
+        <Button asChild>
+          <Link href="/posts">View Posts</Link>
+        </Button>
+      </div>
+    </>
+  )
+}
+```
+
+2. **Create a controller action:**
+
+```ruby
+# app/controllers/dashboard_controller.rb
+class DashboardController < ApplicationController
+  before_action :authenticate_user!
+
+  def index
+    render inertia: "Dashboard", props: {
+      user: {
+        name: current_user.name,
+        email: current_user.email
+      },
+      stats: {
+        views: current_user.profile_views,
+        posts: current_user.posts.count
+      }
+    }
+  end
+end
+```
+
+3. **Add a route:**
+
+```ruby
+# config/routes.rb
+get "dashboard", to: "dashboard#index"
+```
+
+### Navigation with Inertia
+
+Use the `Link` component for client-side navigation:
+
+```tsx
+import { Link } from '@inertiajs/react'
+
+<Link href="/dashboard">Dashboard</Link>
+<Link href="/posts" method="post">Create Post</Link>
+<Link href="/logout" method="delete" as="button">Logout</Link>
+```
+
+### Forms with Inertia
+
+Use the `useForm` hook for form handling:
+
+```tsx
+import { useForm } from '@inertiajs/react'
+
+export default function CreatePost() {
+  const { data, setData, post, processing, errors } = useForm({
+    title: '',
+    content: '',
+  })
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault()
+    post('/posts')
+  }
+
+  return (
+    <form onSubmit={submit}>
+      <input
+        value={data.title}
+        onChange={e => setData('title', e.target.value)}
+      />
+      {errors.title && <div>{errors.title}</div>}
+
+      <textarea
+        value={data.content}
+        onChange={e => setData('content', e.target.value)}
+      />
+      {errors.content && <div>{errors.content}</div>}
+
+      <button type="submit" disabled={processing}>
+        Submit
+      </button>
+    </form>
+  )
+}
+```
+
+### Shared Data
+
+Share data across all pages by using `inertia_share` in ApplicationController:
+
+```ruby
+class ApplicationController < ActionController::Base
+  include InertiaRails::Controller
+
+  inertia_share do
+    {
+      auth: {
+        user: current_user ? {
+          id: current_user.id,
+          name: current_user.name,
+          email: current_user.email
+        } : nil
+      },
+      flash: {
+        notice: flash[:notice],
+        alert: flash[:alert]
+      }
+    }
+  end
+end
+```
+
+Access shared data in any page:
+
+```tsx
+import { usePage } from '@inertiajs/react'
+
+export default function MyPage() {
+  const { auth } = usePage().props
+
+  return (
+    <div>
+      {auth.user && <p>Logged in as {auth.user.name}</p>}
+    </div>
+  )
+}
+```
+
+### Layout Components
+
+Create a shared layout for your pages:
+
+```tsx
+// app/frontend/components/Layout.tsx
+import React from 'react'
+import { Link } from '@inertiajs/react'
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background">
+      <nav className="border-b">
+        <div className="container mx-auto px-4 py-4 flex gap-4">
+          <Link href="/">Home</Link>
+          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/posts">Posts</Link>
+        </div>
+      </nav>
+
+      <main className="container mx-auto px-4 py-8">
+        {children}
+      </main>
+    </div>
+  )
+}
+```
+
+Use the layout in your pages:
+
+```tsx
+import Layout from '@/components/Layout'
+
+export default function Dashboard() {
+  return (
+    <Layout>
+      <h1>Dashboard</h1>
+      {/* page content */}
+    </Layout>
+  )
+}
+```
+
+### Example Page
+
+Visit `http://localhost:3000/welcome` to see an example Inertia.js page in action.
 
 ## Styling with Tailwind CSS
 
