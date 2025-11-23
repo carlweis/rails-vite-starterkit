@@ -107,7 +107,7 @@ export default function TwoFactorSetup({ qr_code, secret, flash, error }: TwoFac
                   )}
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4">
                   <Button
                     type="submit"
                     className="flex-1 h-12 text-base font-medium"
