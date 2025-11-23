@@ -13,7 +13,7 @@ gem "jbuilder"
 gem "devise", "~> 4.9"
 gem "devise-two-factor", "~> 6.0"
 gem "pundit", "~> 2.3"
-gem "rqrcode", "~> 2.2"
+gem "rqrcode", "~> 3.1"
 
 # Version tracking for models (will add when Rails 8 support is available)
 # gem "paper_trail", "~> 15.1"
