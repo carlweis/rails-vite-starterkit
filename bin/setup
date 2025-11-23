@@ -92,6 +92,8 @@ FileUtils.chdir APP_ROOT do
   puts "  Sidekiq: http://localhost:3000/sidekiq"
   puts "  Flipper: http://localhost:3000/flipper"
   puts ""
+  puts "== Generating encryption keys =="
+  system "bin/rails db:encryption:init"
 
   unless ARGV.include?("--skip-server")
     puts "Starting development server..."
