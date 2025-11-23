@@ -13,9 +13,11 @@ class Users::TwoFactorSettingsController < ApplicationController
         flash: flash.to_hash
       }
     else
-      # Generate a new OTP secret for setup
-      current_user.otp_secret = User.generate_otp_secret
-      current_user.save!
+      # Generate a new OTP secret for setup if one doesn't exist
+      if current_user.otp_secret.blank?
+        current_user.otp_secret = User.generate_otp_secret
+        current_user.save!
+      end
 
       qr_code = RQRCode::QRCode.new(current_user.otp_provisioning_uri(current_user.email, issuer: 'RailsApp'))
       qr_svg = qr_code.as_svg(
@@ -60,7 +62,7 @@ class Users::TwoFactorSettingsController < ApplicationController
 
   # DELETE /users/two_factor_settings
   def destroy
-    current_user.update!(otp_required_for_login: false)
+    current_user.update!(otp_required_for_login: false, otp_secret: nil)
     redirect_to users_two_factor_settings_path, notice: 'Two-factor authentication disabled'
   end
 end
