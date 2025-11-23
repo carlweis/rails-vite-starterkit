@@ -8,7 +8,8 @@ class ProfilesController < ApplicationController
         name: current_user.name,
         email: current_user.email,
         username: current_user.username,
-        role: current_user.role
+        role: current_user.role,
+        otp_required_for_login: current_user.otp_required_for_login
       }
     }
   end
