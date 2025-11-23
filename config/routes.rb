@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   get "welcome", to: "inertia_pages#welcome"
 
   # User profile
-  resource :profile, only: [:show, :update]
+  resource :profile, only: [:show, :update, :destroy] do
+    patch 'password', to: 'profiles#update_password', on: :collection
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
