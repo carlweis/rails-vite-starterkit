@@ -17,13 +17,14 @@
  */
 
 import React, { FormEvent } from 'react'
-import { Head, useForm, usePage } from '@inertiajs/react'
+import { Head, useForm, usePage, router } from '@inertiajs/react'
 import { Layout } from '@/components/Layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Shield, CheckCircle2, XCircle } from 'lucide-react'
 
 interface User {
   id: number
@@ -31,6 +32,7 @@ interface User {
   username?: string
   email: string
   role: 'user' | 'admin'
+  otp_required_for_login: boolean
 }
 
 interface ProfileProps {
@@ -261,6 +263,51 @@ export default function Profile({ user }: ProfileProps) {
                   </Button>
                 </div>
               </form>
+            </CardContent>
+          </Card>
+
+          {/* Security Section - Two-Factor Authentication */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Shield className="h-5 w-5 text-primary" />
+                <CardTitle>Security</CardTitle>
+              </div>
+              <CardDescription>
+                Enhance your account security with two-factor authentication
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-1 flex-1">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-medium">Two-Factor Authentication</h4>
+                    {user.otp_required_for_login ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Enabled
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">
+                        <XCircle className="h-3 w-3" />
+                        Disabled
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {user.otp_required_for_login
+                      ? 'Your account is protected with two-factor authentication'
+                      : 'Add an extra layer of security to your account'}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant={user.otp_required_for_login ? "outline" : "default"}
+                  onClick={() => router.visit('/users/two_factor_settings')}
+                >
+                  {user.otp_required_for_login ? 'Manage 2FA' : 'Enable 2FA'}
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
