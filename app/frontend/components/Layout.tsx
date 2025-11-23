@@ -38,14 +38,14 @@ export function Layout({ children, user }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between px-4 md:px-8">
           {/* Logo/Brand */}
           <Link
             href="/"
             className="flex items-center space-x-2 text-xl font-bold tracking-tight hover:opacity-80 transition-opacity"
           >
-            <span>RAILS</span>
+            <span>APP NAME</span>
           </Link>
 
           {/* Right side - User menu or Sign In */}
