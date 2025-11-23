@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  content: MyText
+  description: MyText
+  visibility: 1
+  user: one
+  category: MyString
+  ai_provider: 1
+  usage_count: 1
+  like_count: 1
+
+two:
+  title: MyString
+  content: MyText
+  description: MyText
+  visibility: 1
+  user: two
+  category: MyString
+  ai_provider: 1
+  usage_count: 1
+  like_count: 1

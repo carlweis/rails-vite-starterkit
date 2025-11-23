@@ -6,6 +6,11 @@ class User < ApplicationRecord
          :two_factor_authenticatable,
          otp_secret_encryption_key: ENV.fetch('OTP_SECRET_ENCRYPTION_KEY', Rails.application.secret_key_base)
 
+  # Associations
+  has_many :prompts, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :prompt_versions, foreign_key: :changed_by_id, dependent: :nullify
+
   # Enums
   enum :role, { user: 0, admin: 1 }
 

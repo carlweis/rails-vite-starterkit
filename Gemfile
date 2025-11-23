@@ -15,6 +15,9 @@ gem "devise-two-factor", "~> 6.0"
 gem "pundit", "~> 2.3"
 gem "rqrcode", "~> 2.2"
 
+# Pagination
+gem "kaminari", "~> 1.2"
+
 # Version tracking for models (will add when Rails 8 support is available)
 # gem "paper_trail", "~> 15.1"
 
