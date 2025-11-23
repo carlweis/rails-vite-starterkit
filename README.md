@@ -1,22 +1,42 @@
-# Rails + Vite + React Starter Kit
+# Rails + Vite + React Starter Kit (with Auth)
 
-A modern Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tailwind CSS, and Shadcn UI. Build full-stack applications quickly with the power of Rails on the backend and a lightning-fast React frontend.
+A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tailwind CSS, Shadcn UI, **and complete authentication system**. Build full-stack applications quickly with the power of Rails on the backend and a lightning-fast React frontend.
 
 ## Tech Stack
 
+### Backend
 - **Ruby on Rails 8.1** - Latest Rails with modern features
+- **PostgreSQL** - Production-grade database
+- **Devise** - Complete authentication solution
+- **Devise-Two-Factor** - Two-factor authentication (2FA)
+- **Pundit** - Authorization with policies
+- **ActiveStorage** - File uploads and attachments
+
+### Frontend
 - **Vite** - Next generation frontend tooling for lightning-fast builds
 - **TypeScript** - Type-safe JavaScript
 - **React 18** - Modern React with hooks and concurrent features
 - **Tailwind CSS v3** - Utility-first CSS framework
 - **Shadcn UI** - Beautiful, accessible component library
-- **Vite Ruby** - Seamless integration between Rails and Vite
+- **Dark Mode** - Built-in theme switching
+
+## Features
+
+✅ **Authentication** - Complete user auth with Devise
+✅ **Two-Factor Auth** - Optional 2FA with QR codes
+✅ **Authorization** - Policy-based permissions with Pundit
+✅ **Database** - PostgreSQL for all environments
+✅ **Dark Mode** - Theme switching out of the box
+✅ **File Uploads** - ActiveStorage configured
+✅ **Testing** - RSpec, Capybara, FactoryBot ready
+✅ **Modern Frontend** - React + TypeScript + Vite
+✅ **UI Components** - Shadcn UI + Tailwind CSS
 
 ## Prerequisites
 
 - Ruby 3.3.6 or higher
 - Node.js 22.x or higher
-- SQLite3
+- PostgreSQL 14+ (running locally)
 
 ## Quick Start
 
