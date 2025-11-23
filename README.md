@@ -40,39 +40,54 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 
 ## Quick Start
 
-### 1. Clone and Install
+### Automated Setup (Recommended)
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd rails-vite-starterkit
+git clone https://github.com/carlweis/rails-vite-starterkit.git my-app
+cd my-app
 
-# Install Ruby dependencies
+# Run automated setup (installs dependencies, creates database, seeds demo user, starts server)
+bin/setup
+```
+
+That's it! The setup script will:
+- Install Ruby and JavaScript dependencies
+- Start PostgreSQL if needed
+- Create and migrate the database
+- Seed a demo admin user
+- Start the development server
+
+**Default Demo User:**
+- Email: `demo@example.com`
+- Password: `demouser1234`
+- Role: Admin
+
+Visit `http://localhost:3000` and log in with the demo user.
+
+### Manual Setup
+
+If you prefer to run each step manually:
+
+```bash
+# Clone the repository
+git clone https://github.com/carlweis/rails-vite-starterkit.git my-app
+cd my-app
+
+# Install dependencies
 bundle install
-
-# Install JavaScript dependencies
 npm install
 
+# Start PostgreSQL (if not running)
+pg_ctlcluster 16 main start
+
 # Setup database
-bin/rails db:create db:migrate
-```
+bin/rails db:create
+bin/rails db:migrate
+bin/rails db:seed
 
-### 2. Run Development Server
-
-You have two options for running the development server:
-
-**Option A: Single command (recommended)**
-```bash
+# Start development server
 bin/dev
-```
-
-**Option B: Separate processes**
-```bash
-# Terminal 1 - Rails server
-bin/rails server
-
-# Terminal 2 - Vite dev server
-npm run dev
 ```
 
 Visit `http://localhost:3000` to see your application.
