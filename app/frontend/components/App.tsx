@@ -5,7 +5,7 @@ function App() {
   const [count, setCount] = React.useState(0)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-200 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full">
         <div className="bg-card rounded-2xl shadow-xl p-8 border">
           <h1 className="text-4xl font-bold text-foreground mb-4">
