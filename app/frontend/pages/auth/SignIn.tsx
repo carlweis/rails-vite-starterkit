@@ -14,9 +14,11 @@ interface SignInProps {
 
 export default function SignIn({ flash }: SignInProps) {
   const { data, setData, post, processing, errors } = useForm({
-    email: '',
-    password: '',
-    remember_me: false,
+    user: {
+      email: '',
+      password: '',
+      remember_me: false,
+    }
   })
 
   function handleSubmit(e: FormEvent) {
@@ -62,17 +64,17 @@ export default function SignIn({ flash }: SignInProps) {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
-                  name="email"
+                  name="user[email]"
                   type="email"
                   autoComplete="email"
                   required
-                  value={data.email}
-                  onChange={(e) => setData('email', e.target.value)}
+                  value={data.user.email}
+                  onChange={(e) => setData('user.email', e.target.value)}
                   className="h-12"
                   placeholder="you@example.com"
                 />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
+                {errors['user.email'] && (
+                  <p className="text-sm text-destructive">{errors['user.email']}</p>
                 )}
               </div>
 
@@ -88,27 +90,27 @@ export default function SignIn({ flash }: SignInProps) {
                 </div>
                 <Input
                   id="password"
-                  name="password"
+                  name="user[password]"
                   type="password"
                   autoComplete="current-password"
                   required
-                  value={data.password}
-                  onChange={(e) => setData('password', e.target.value)}
+                  value={data.user.password}
+                  onChange={(e) => setData('user.password', e.target.value)}
                   className="h-12"
                   placeholder="••••••••"
                 />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password}</p>
+                {errors['user.password'] && (
+                  <p className="text-sm text-destructive">{errors['user.password']}</p>
                 )}
               </div>
 
               <div className="flex items-center space-x-2">
                 <input
                   id="remember_me"
-                  name="remember_me"
+                  name="user[remember_me]"
                   type="checkbox"
-                  checked={data.remember_me}
-                  onChange={(e) => setData('remember_me', e.target.checked)}
+                  checked={data.user.remember_me}
+                  onChange={(e) => setData('user.remember_me', e.target.checked)}
                   className="h-4 w-4 rounded border-input"
                 />
                 <Label

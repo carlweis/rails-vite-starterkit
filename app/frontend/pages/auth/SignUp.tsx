@@ -14,11 +14,13 @@ interface SignUpProps {
 
 export default function SignUp({ flash }: SignUpProps) {
   const { data, setData, post, processing, errors } = useForm({
-    name: '',
-    username: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    user: {
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+    }
   })
 
   function handleSubmit(e: FormEvent) {
@@ -64,16 +66,16 @@ export default function SignUp({ flash }: SignUpProps) {
                 <Label htmlFor="name">Full Name</Label>
                 <Input
                   id="name"
-                  name="name"
+                  name="user[name]"
                   type="text"
                   autoComplete="name"
-                  value={data.name}
-                  onChange={(e) => setData('name', e.target.value)}
+                  value={data.user.name}
+                  onChange={(e) => setData('user.name', e.target.value)}
                   className="h-12"
                   placeholder="John Doe"
                 />
-                {errors.name && (
-                  <p className="text-sm text-destructive">{errors.name}</p>
+                {errors['user.name'] && (
+                  <p className="text-sm text-destructive">{errors['user.name']}</p>
                 )}
               </div>
 
@@ -81,16 +83,16 @@ export default function SignUp({ flash }: SignUpProps) {
                 <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
-                  name="username"
+                  name="user[username]"
                   type="text"
                   autoComplete="username"
-                  value={data.username}
-                  onChange={(e) => setData('username', e.target.value)}
+                  value={data.user.username}
+                  onChange={(e) => setData('user.username', e.target.value)}
                   className="h-12"
                   placeholder="johndoe"
                 />
-                {errors.username && (
-                  <p className="text-sm text-destructive">{errors.username}</p>
+                {errors['user.username'] && (
+                  <p className="text-sm text-destructive">{errors['user.username']}</p>
                 )}
               </div>
 
@@ -98,17 +100,17 @@ export default function SignUp({ flash }: SignUpProps) {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
-                  name="email"
+                  name="user[email]"
                   type="email"
                   autoComplete="email"
                   required
-                  value={data.email}
-                  onChange={(e) => setData('email', e.target.value)}
+                  value={data.user.email}
+                  onChange={(e) => setData('user.email', e.target.value)}
                   className="h-12"
                   placeholder="you@example.com"
                 />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
+                {errors['user.email'] && (
+                  <p className="text-sm text-destructive">{errors['user.email']}</p>
                 )}
               </div>
 
@@ -116,17 +118,17 @@ export default function SignUp({ flash }: SignUpProps) {
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
-                  name="password"
+                  name="user[password]"
                   type="password"
                   autoComplete="new-password"
                   required
-                  value={data.password}
-                  onChange={(e) => setData('password', e.target.value)}
+                  value={data.user.password}
+                  onChange={(e) => setData('user.password', e.target.value)}
                   className="h-12"
                   placeholder="••••••••"
                 />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password}</p>
+                {errors['user.password'] && (
+                  <p className="text-sm text-destructive">{errors['user.password']}</p>
                 )}
                 <p className="text-xs text-muted-foreground">
                   Minimum 8 characters
@@ -137,17 +139,17 @@ export default function SignUp({ flash }: SignUpProps) {
                 <Label htmlFor="password_confirmation">Confirm Password</Label>
                 <Input
                   id="password_confirmation"
-                  name="password_confirmation"
+                  name="user[password_confirmation]"
                   type="password"
                   autoComplete="new-password"
                   required
-                  value={data.password_confirmation}
-                  onChange={(e) => setData('password_confirmation', e.target.value)}
+                  value={data.user.password_confirmation}
+                  onChange={(e) => setData('user.password_confirmation', e.target.value)}
                   className="h-12"
                   placeholder="••••••••"
                 />
-                {errors.password_confirmation && (
-                  <p className="text-sm text-destructive">{errors.password_confirmation}</p>
+                {errors['user.password_confirmation'] && (
+                  <p className="text-sm text-destructive">{errors['user.password_confirmation']}</p>
                 )}
               </div>
             </div>
