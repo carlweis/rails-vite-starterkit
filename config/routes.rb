@@ -2,7 +2,19 @@ require "sidekiq/web"
 require "flipper/ui"
 
 Rails.application.routes.draw do
-  devise_for :users
+  # Devise routes with custom controllers
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    passwords: 'users/passwords'
+  }
+
+  # Two-factor authentication routes
+  namespace :users do
+    resource :two_factor_settings, only: [:show, :create, :destroy]
+    get 'two_factor_authentication', to: 'two_factor_authentication#show'
+    post 'two_factor_authentication', to: 'two_factor_authentication#create'
+  end
 
   # Admin-only UIs
   authenticate :user, ->(user) { user.admin? } do

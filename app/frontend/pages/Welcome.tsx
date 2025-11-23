@@ -1,27 +1,25 @@
 import React from 'react'
 import { Head, Link } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { Layout } from '@/components/Layout'
 
 interface WelcomeProps {
   message: string
   user?: {
+    id: number
     name: string
     email: string
+    username?: string
+    role?: 'user' | 'admin'
   }
 }
 
 export default function Welcome({ message, user }: WelcomeProps) {
   return (
-    <>
+    <Layout user={user}>
       <Head title="Welcome" />
 
-      <div className="min-h-screen bg-background flex items-center justify-center p-8">
-        {/* Theme toggle in top right corner */}
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-
+      <div className="min-h-[calc(100vh-4rem)] bg-background flex items-center justify-center p-8">
         <div className="max-w-2xl w-full space-y-8">
           <div className="text-center space-y-4">
             <h1 className="text-5xl font-bold tracking-tight">
@@ -50,9 +48,9 @@ export default function Welcome({ message, user }: WelcomeProps) {
               <Link href="/home/index">Go to Home Page</Link>
             </Button>
 
-            {!user && (
+            {user && (
               <Button variant="outline" asChild>
-                <Link href="/users/sign_in">Sign In</Link>
+                <Link href="/users/two_factor_settings">Security Settings</Link>
               </Button>
             )}
           </div>
@@ -65,10 +63,11 @@ export default function Welcome({ message, user }: WelcomeProps) {
               <li>✅ <span className="font-medium text-foreground">Shadcn UI</span> - Beautiful components</li>
               <li>✅ <span className="font-medium text-foreground">Tailwind CSS</span> - Utility-first styling</li>
               <li>✅ <span className="font-medium text-foreground">Vite</span> - Lightning-fast builds</li>
+              <li>✅ <span className="font-medium text-foreground">Devise + 2FA</span> - Secure authentication</li>
             </ul>
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   )
 }
