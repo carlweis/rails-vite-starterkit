@@ -118,7 +118,7 @@ export default function TwoFactorSetup({ qr_code, secret, flash, error }: TwoFac
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-12"
+                    className="flex-1 h-12"
                     asChild
                   >
                     <Link href="/">Cancel</Link>

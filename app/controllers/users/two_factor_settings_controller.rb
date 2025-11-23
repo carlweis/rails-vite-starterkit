@@ -37,7 +37,9 @@ class Users::TwoFactorSettingsController < ApplicationController
 
   # POST /users/two_factor_settings
   def create
-    if current_user.validate_and_consume_otp!(params[:otp_attempt])
+    # During setup, validate with drift tolerance and don't consume the OTP
+    # This allows users to retry with the same code and handles clock drift
+    if current_user.validate_and_consume_otp!(params[:otp_attempt], drift: 30)
       current_user.update!(otp_required_for_login: true)
       redirect_to users_two_factor_settings_path, notice: 'Two-factor authentication enabled successfully'
     else
