@@ -25,6 +25,30 @@ def start_postgres
   end
 end
 
+def redis_running?
+  system("redis-cli ping > /dev/null 2>&1")
+end
+
+def start_redis
+  puts "\n== Checking Redis =="
+  return if redis_running?
+
+  puts "Redis not running. Attempting to start..."
+  if system("redis-server --daemonize yes")
+    sleep 1 # Give Redis a moment to start
+    if redis_running?
+      puts "✓ Redis started successfully"
+    else
+      puts "⚠ Redis did not start properly"
+      exit 1
+    end
+  else
+    puts "⚠ Could not start Redis automatically. Please start it manually:"
+    puts "  redis-server --daemonize yes"
+    exit 1
+  end
+end
+
 FileUtils.chdir APP_ROOT do
   # This script is a way to set up or update your development environment automatically.
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
@@ -36,8 +60,9 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Installing JavaScript dependencies =="
   system! "npm install"
 
-  # Start PostgreSQL if needed
+  # Start PostgreSQL and Redis if needed
   start_postgres
+  start_redis
 
   puts "\n== Preparing database =="
   system! "bin/rails db:prepare"
@@ -62,6 +87,10 @@ FileUtils.chdir APP_ROOT do
   puts "  Email: demo@example.com"
   puts "  Password: demouser1234"
   puts "  Role: Admin"
+  puts ""
+  puts "Admin-only UIs (login as admin first):"
+  puts "  Sidekiq: http://localhost:3000/sidekiq"
+  puts "  Flipper: http://localhost:3000/flipper"
   puts ""
 
   unless ARGV.include?("--skip-server")

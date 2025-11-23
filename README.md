@@ -11,6 +11,9 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 - **Devise-Two-Factor** - Two-factor authentication (2FA)
 - **Pundit** - Authorization with policies
 - **ActiveStorage** - File uploads and attachments
+- **Sidekiq** - Background job processing
+- **Redis** - In-memory data store for Sidekiq
+- **Flipper** - Feature flags for gradual rollouts
 
 ### Frontend
 - **Vite** - Next generation frontend tooling for lightning-fast builds
@@ -26,6 +29,9 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 ✅ **Two-Factor Auth** - Optional 2FA with QR codes
 ✅ **Authorization** - Policy-based permissions with Pundit
 ✅ **Database** - PostgreSQL for all environments
+✅ **Background Jobs** - Sidekiq + Redis for async processing
+✅ **Feature Flags** - Flipper for controlled feature rollouts
+✅ **Admin UIs** - Sidekiq & Flipper web dashboards
 ✅ **Dark Mode** - Theme switching out of the box
 ✅ **File Uploads** - ActiveStorage configured
 ✅ **Testing** - RSpec, Capybara, FactoryBot ready
@@ -37,6 +43,7 @@ A production-ready Ruby on Rails 8 starter kit with Vite, TypeScript, React, Tai
 - Ruby 3.3.6 or higher
 - Node.js 22.x or higher
 - PostgreSQL 14+ (running locally)
+- Redis 5.0+ (for background jobs)
 
 ## Quick Start
 
@@ -53,7 +60,7 @@ bin/setup
 
 That's it! The setup script will:
 - Install Ruby and JavaScript dependencies
-- Start PostgreSQL if needed
+- Start PostgreSQL and Redis if needed
 - Create and migrate the database
 - Seed a demo admin user
 - Start the development server
@@ -62,6 +69,10 @@ That's it! The setup script will:
 - Email: `demo@example.com`
 - Password: `demouser1234`
 - Role: Admin
+
+**Admin UIs** (login as admin first):
+- Sidekiq: `http://localhost:3000/sidekiq`
+- Flipper: `http://localhost:3000/flipper`
 
 Visit `http://localhost:3000` and log in with the demo user.
 
@@ -78,8 +89,9 @@ cd my-app
 bundle install
 npm install
 
-# Start PostgreSQL (if not running)
+# Start PostgreSQL and Redis (if not running)
 pg_ctlcluster 16 main start
+redis-server --daemonize yes
 
 # Setup database
 bin/rails db:create
@@ -243,6 +255,78 @@ bin/rails test
 
 # Run system tests
 bin/rails test:system
+```
+
+## Background Jobs & Feature Flags
+
+### Sidekiq (Background Jobs)
+
+Sidekiq is configured and ready to use for background job processing.
+
+**Creating a background job:**
+```bash
+bin/rails generate job example
+```
+
+**Using background jobs:**
+```ruby
+# In your controller or model
+ExampleJob.perform_later(arg1, arg2)
+
+# Or with a delay
+ExampleJob.set(wait: 5.minutes).perform_later(arg1, arg2)
+```
+
+**Monitoring jobs:**
+Visit `http://localhost:3000/sidekiq` (admin only) to:
+- View job queues and their status
+- Monitor failed jobs and retry them
+- See real-time job processing statistics
+
+**Running Sidekiq:**
+```bash
+# Sidekiq starts automatically with bin/dev
+# To run it manually:
+bundle exec sidekiq
+```
+
+### Flipper (Feature Flags)
+
+Flipper is configured for feature flag management.
+
+**Basic usage:**
+```ruby
+# In your code
+if Flipper.enabled?(:new_feature)
+  # New feature code
+else
+  # Old code
+end
+
+# Enable for a specific user
+Flipper.enable_actor(:new_feature, current_user)
+
+# Enable for a percentage of users
+Flipper.enable_percentage_of_actors(:new_feature, 25)
+
+# Enable for everyone
+Flipper.enable(:new_feature)
+```
+
+**Managing feature flags:**
+Visit `http://localhost:3000/flipper` (admin only) to:
+- Create new feature flags
+- Enable/disable features
+- Enable features for specific users or groups
+- Set percentage rollouts
+
+**Common patterns:**
+```ruby
+# Enable for admins only
+Flipper.enable(:admin_feature) if current_user.admin?
+
+# Gradual rollout
+Flipper.enable_percentage_of_time(:beta_feature, 10)  # 10% of requests
 ```
 
 ## Deployment

@@ -1,5 +1,15 @@
+require "sidekiq/web"
+require "flipper/ui"
+
 Rails.application.routes.draw do
   devise_for :users
+
+  # Admin-only UIs
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => "/sidekiq"
+    mount Flipper::UI.app(Flipper) => "/flipper"
+  end
+
   get "home/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
