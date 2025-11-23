@@ -1,14 +1,11 @@
 import React from 'react'
 import { ThemeProvider } from '../contexts/ThemeContext'
-import { Button } from './ui/button'
-import Example from './Example'
+import Welcome from './Welcome'
 
 function App() {
-  const [count, setCount] = React.useState(0)
-
   return (
     <ThemeProvider>
-      <Example />
+      <Welcome />
     </ThemeProvider>
   )
 }
