@@ -2,7 +2,19 @@ require "sidekiq/web"
 require "flipper/ui"
 
 Rails.application.routes.draw do
-  devise_for :users
+  # Devise routes with custom controllers
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    passwords: 'users/passwords'
+  }
+
+  # Two-factor authentication routes
+  namespace :users do
+    resource :two_factor_settings, only: [:show, :create, :destroy]
+    get 'two_factor_authentication', to: 'two_factor_authentication#show'
+    post 'two_factor_authentication', to: 'two_factor_authentication#create'
+  end
 
   # Admin-only UIs
   authenticate :user, ->(user) { user.admin? } do
@@ -14,6 +26,11 @@ Rails.application.routes.draw do
 
   # Inertia.js example page
   get "welcome", to: "inertia_pages#welcome"
+
+  # User profile
+  resource :profile, only: [:show, :update, :destroy] do
+    patch 'password', to: 'profiles#update_password', on: :collection
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
