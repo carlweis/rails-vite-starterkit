@@ -48,7 +48,7 @@ gem "inertia_rails", "~> 3.1"
 gem "image_processing", "~> 1.2"
 
 # Background job processing
-gem "sidekiq", "~> 8.0"
+gem "sidekiq", "~> 8.1"
 gem "redis", "~> 5.0"
 
 # Feature flags
